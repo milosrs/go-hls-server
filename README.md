@@ -1,2 +1,2 @@
-# go-hls-server
+# GO HLS Server
 Go HTTP Live Streaming Server
