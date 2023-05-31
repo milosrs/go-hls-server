@@ -1,4 +1,4 @@
-# 🚀 Welcome to your new awesome project!
+# 🚀 Typescript + Hyperscript project used to interact with the server
 
 This project has been created using **webpack-cli**, you can now run
 
