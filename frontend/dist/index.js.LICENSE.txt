@@ -1,0 +1,71 @@
+/* @__PURE__ */
+
+/* binding */
+
+/* harmony export */
+
+/* harmony import */
+
+/* reexport safe */
+
+/* webpack/runtime/compat get default export */
+
+/*! ./utils/fileUpload */
+
+/*! ./utils/setupHTMX */
+
+/*! file-upload-with-preview */
+
+/*! htmx.org */
+
+/*!**********************!*\
+  !*** ./src/index.ts ***!
+  \**********************/
+
+/*!********************************!*\
+  !*** ./src/utils/setupHTMX.js ***!
+  \********************************/
+
+/*!*********************************!*\
+  !*** ./src/utils/fileUpload.ts ***!
+  \*********************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/htmx.org/dist/htmx.min.js ***!
+  \************************************************/
+
+/*!********************************************************************************!*\
+  !*** ./node_modules/file-upload-with-preview/dist/file-upload-with-preview.js ***!
+  \********************************************************************************/
+
+/************************************************************************/
+
+/******/
+
+/***/
+
+// Check if module is in cache
+
+// Create a new module (and put it into the cache)
+
+// Execute the module function
+
+// Return the exports of the module
+
+// The module cache
+
+// The require function
+
+// This entry need to be wrapped in an IIFE because it need to be in strict mode.
+
+// define __esModule on exports
+
+// define getter functions for harmony exports
+
+// getDefaultExport function for compatibility with non-harmony modules
+
+// no module.id needed
+
+// no module.loaded needed
+
+// webpackBootstrap
