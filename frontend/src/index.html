@@ -3,6 +3,7 @@
 <html>
     <meta charset="UTF-8"/>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+    <link rel="stylesheet" href="main.css">
     
     <head>
         <title>Chunky</title>
@@ -10,21 +11,30 @@
     
     <script src="index.js"></script>
 
-    <body>
-        <main>Welcome to Chunky, a video upload server!</main>
-        <button _="on click call alert('You clicked me!')">
-            A hyperscript clickme button
-        </button>
-          
-        <div 
-            class="custom-file-container" 
-            _="init
-                 call lib.randomString(7) 
-                then set @data-upload-id to it
-                then call lib.createFileUpload(result)
-            end"
-        >
-            Click me again
+    <body class="bg-black">
+        <main>
+            <h1 class="text-center text-xl font-semibold">
+                Welcome to Chunky, a video upload server!
+            </h1>
+        </main>
+
+        <div class="flex flex-col">
+            <div class="file-import-container dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl align-baseline justify-center">
+                <div 
+                    class="custom-file-container" 
+                    _="init
+                            call lib.randomString(7) 
+                        then set @data-upload-id to it
+                        then call lib.createFileUpload(result)
+                    end"
+                ></div>
+            </div>
+
+            <span class="flex content-center align-baseline justify-center">
+                <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" _="on click call lib.createFileChunks() end">
+                    Upload
+                </button>
+            </span>
         </div>
     </body>
 </html>

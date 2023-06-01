@@ -10,6 +10,8 @@
 
 /* webpack/runtime/compat get default export */
 
+/*! ./index.scss */
+
 /*! ./utils/fileUpload */
 
 /*! ./utils/setupHTMX */
@@ -21,6 +23,10 @@
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
+
+/*!************************!*\
+  !*** ./src/index.scss ***!
+  \************************/
 
 /*!********************************!*\
   !*** ./src/utils/setupHTMX.js ***!
@@ -61,6 +67,8 @@
 // define __esModule on exports
 
 // define getter functions for harmony exports
+
+// extracted by mini-css-extract-plugin
 
 // getDefaultExport function for compatibility with non-harmony modules
 

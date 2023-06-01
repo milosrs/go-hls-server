@@ -1,2 +1,3 @@
-import 'file-upload-with-preview/dist/style.css';
-export declare const createFileUpload: (idLength: number) => string;
+export declare const randomString: (length: number) => string;
+export declare const createFileUpload: (hash: string) => string;
+export declare const createFileChunks: () => void;

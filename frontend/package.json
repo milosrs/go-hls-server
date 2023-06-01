@@ -32,10 +32,13 @@
     "mini-css-extract-plugin": "^2.7.5",
     "postcss": "^8.4.21",
     "postcss-loader": "^7.1.0",
+    "postcss-nesting": "^11.2.2",
+    "postcss-preset-env": "^8.4.2",
     "prettier": "^2.8.1",
     "sass": "^1.59.3",
     "sass-loader": "^13.2.1",
     "style-loader": "^3.3.2",
+    "tailwindcss": "^3.3.2",
     "terser-webpack-plugin": "^5.3.9",
     "ts-loader": "^9.4.3",
     "typescript": "^5.0.4",
@@ -45,6 +48,7 @@
     "wepack-cli": "^0.0.1-security"
   },
   "dependencies": {
+    "@tailwindcss/typography": "^0.5.9",
     "file-upload-with-preview": "^6.0.2",
     "htmx.org": "^1.9.2",
     "hyperscript.org": "^0.9.8"
