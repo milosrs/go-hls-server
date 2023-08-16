@@ -22,5 +22,6 @@ export const createFileChunks = async (): Promise<Int8Array[]> => {
         ret.push(new Int8Array(value))
     }
 
+    console.log("RETURN: ", ret)
     return ret
 }
