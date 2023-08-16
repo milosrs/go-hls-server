@@ -1,3 +1,3 @@
 import './utils/setupHTMX';
-import './index.scss';
+import './index.css';
 export * from './utils/fileUpload';

@@ -1,0 +1,1 @@
+cd frontend & npm run build:dev & npx tailwindcss -i ./src/index.css -o ./dist/index.css --watch & cd ../

@@ -1,4 +1,4 @@
-@import 'file-upload-with-preview/dist/style.css';
+@import 'static/style.css';
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
