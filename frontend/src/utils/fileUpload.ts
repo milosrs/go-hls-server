@@ -43,7 +43,7 @@ export const sendFileChunks = async (chunks: Uint8Array[]) => {
         const resp = await (i === 0 ? sendStartUpload(chunks, fileName.value) : sendUploadChunk(chunks[i], fileName.value))
 
         if(resp.status === 200) {
-            const currentProgress = (chunks.length / i) * 100
+            const currentProgress = (i / chunks.length) * 100
             progress.style.width = `${currentProgress.toFixed(0)}%`
             progress.innerText = `${currentProgress.toFixed(0)}%`
         } else {
