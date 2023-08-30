@@ -1,9 +1,11 @@
 package model
 
-import "mime/multipart"
+type FileChunk struct {
+	Name  string `json:"name" binding:"required"`
+	Bytes []byte `json:"bytes" binding:"required"`
+}
 
-type File struct {
-	Name        string               `form:"name" binding:"required"`
-	Description string               `form:"description" binding:"required"`
-	Data        multipart.FileHeader `form:"file"`
+type InitialFileData struct {
+	FileChunk
+	NumberOfChunks int64 `json:"numberOfChunks" binding:"required"`
 }

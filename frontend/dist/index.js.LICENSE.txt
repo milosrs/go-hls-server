@@ -1,16 +1,45 @@
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+*/
+
 /* @__PURE__ */
 
 /* binding */
+
+/* harmony default export */
 
 /* harmony export */
 
 /* harmony import */
 
+/* istanbul ignore if  */
+
+/* istanbul ignore next  */
+
 /* reexport safe */
 
 /* webpack/runtime/compat get default export */
 
-/*! ./index.scss */
+/*! !!../node_modules/css-loader/dist/cjs.js!../node_modules/postcss-loader/dist/cjs.js!./index.css */
+
+/*! !../node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js */
+
+/*! !../node_modules/style-loader/dist/runtime/insertBySelector.js */
+
+/*! !../node_modules/style-loader/dist/runtime/insertStyleElement.js */
+
+/*! !../node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js */
+
+/*! !../node_modules/style-loader/dist/runtime/styleDomAPI.js */
+
+/*! !../node_modules/style-loader/dist/runtime/styleTagTransform.js */
+
+/*! ../node_modules/css-loader/dist/runtime/api.js */
+
+/*! ../node_modules/css-loader/dist/runtime/sourceMaps.js */
+
+/*! ./index.css */
 
 /*! ./utils/fileUpload */
 
@@ -24,9 +53,9 @@
   !*** ./src/index.ts ***!
   \**********************/
 
-/*!************************!*\
-  !*** ./src/index.scss ***!
-  \************************/
+/*!***********************!*\
+  !*** ./src/index.css ***!
+  \***********************/
 
 /*!********************************!*\
   !*** ./src/utils/setupHTMX.js ***!
@@ -40,9 +69,47 @@
   !*** ./node_modules/htmx.org/dist/htmx.min.js ***!
   \************************************************/
 
+/*!*****************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/api.js ***!
+  \*****************************************************/
+
+/*!************************************************************!*\
+  !*** ./node_modules/css-loader/dist/runtime/sourceMaps.js ***!
+  \************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/styleDomAPI.js ***!
+  \***************************************************************/
+
+/*!********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/insertBySelector.js ***!
+  \********************************************************************/
+
+/*!*********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/styleTagTransform.js ***!
+  \*********************************************************************/
+
+/*!**********************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/insertStyleElement.js ***!
+  \**********************************************************************/
+
+/*!****************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/injectStylesIntoStyleTag.js ***!
+  \****************************************************************************/
+
 /*!********************************************************************************!*\
   !*** ./node_modules/file-upload-with-preview/dist/file-upload-with-preview.js ***!
   \********************************************************************************/
+
+/*!**********************************************************************************!*\
+  !*** ./node_modules/style-loader/dist/runtime/setAttributesWithoutAttributes.js ***!
+  \**********************************************************************************/
+
+/*!*******************************************************************************************************!*\
+  !*** ./node_modules/css-loader/dist/cjs.js!./node_modules/postcss-loader/dist/cjs.js!./src/index.css ***!
+  \*******************************************************************************************************/
+
+/*#__PURE__*/
 
 /************************************************************************/
 
@@ -56,7 +123,15 @@
 
 // Execute the module function
 
+// Exports
+
+// For old IE
+
+// Module
+
 // Return the exports of the module
+
+// Special case to return head of iframe instead of iframe itself
 
 // The module cache
 
@@ -64,16 +139,24 @@
 
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 
+// This will throw an exception if access to iframe is blocked
+
 // define __esModule on exports
 
 // define getter functions for harmony exports
 
-// extracted by mini-css-extract-plugin
+// due to cross-origin restrictions
 
 // getDefaultExport function for compatibility with non-harmony modules
 
-// no module.id needed
+// import a list of modules into the list
+
+// istanbul ignore if
+
+// istanbul ignore next
 
 // no module.loaded needed
+
+// return the list of modules as css string
 
 // webpackBootstrap

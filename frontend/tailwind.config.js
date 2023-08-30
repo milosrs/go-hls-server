@@ -1,5 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  purge: ['./dist/*.html'],
   content: ["./src/**/*.{html,js}"],
   theme: {
     extend: {},
@@ -7,14 +8,5 @@ module.exports = {
   plugins: [
     require('@tailwindcss/typography'),
   ],
-  colors: {
-    transparent: 'transparent',
-    black: '#000',
-    white: '#fff',
-    gray: {
-      100: '#f7fafc',
-      900: '#1a202c',
-    },
-  }
 }
 

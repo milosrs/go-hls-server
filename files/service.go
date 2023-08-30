@@ -1,9 +1,7 @@
 package files
 
 import (
-	"bytes"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 
@@ -13,7 +11,8 @@ import (
 const videoFolder = "videos"
 
 type Service interface {
-	AppendChunk(f *model.File) (int64, error)
+	CreateFile(f *model.InitialFileData) (int64, error)
+	AppendChunk(f *model.FileChunk) (int64, error)
 	Remove(name string) error
 }
 
@@ -28,36 +27,64 @@ func tryCreateVideoFolder() error {
 	return nil
 }
 
-func (s *ServiceImpl) AppendChunk(f *model.File) (int64, error) {
-	if err := tryCreateVideoFolder(); err != nil {
-		return 0, err
+func doesFileExist(name string) bool {
+	_, err := os.Stat(videoFolder + "/" + name)
+
+	if err != nil {
+		return false
 	}
 
-	videoFile := filepath.Join(videoFolder, f.Name)
-	file, err := os.OpenFile(videoFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0600)
+	return true
+}
+
+func writeBytesToFile(f *os.File, bytes []byte) (int64, error) {
+	_, err := f.Write(bytes)
 	if err != nil {
 		return 0, err
 	}
-	defer file.Close()
 
-	fileContent, err := f.Data.Open()
-	if err != nil {
-		return 0, err
-	}
-	defer fileContent.Close()
-
-	buf := bytes.NewBuffer(nil)
-	_, err = io.Copy(buf, fileContent)
-	if _, err := file.Write(buf.Bytes()); err != nil {
-		return 0, err
-	}
-
-	info, err := os.Stat(videoFile)
+	info, err := f.Stat()
 	if err != nil {
 		return 0, err
 	}
 
 	return info.Size(), nil
+}
+
+func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
+	if err := tryCreateVideoFolder(); err != nil {
+		return 0, err
+	}
+
+	fileExists := doesFileExist(f.Name)
+	if fileExists {
+		info, err := os.Stat(videoFolder + "/" + f.Name)
+		if err != nil {
+			return 0, err
+		}
+
+		return info.Size(), err
+	}
+
+	videoFile := filepath.Join(videoFolder, f.Name)
+	file, err := os.OpenFile(videoFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0604)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	return writeBytesToFile(file, f.Bytes)
+}
+
+func (s *ServiceImpl) AppendChunk(f *model.FileChunk) (int64, error) {
+	videoFile := filepath.Join(videoFolder, f.Name)
+	file, err := os.OpenFile(videoFile, os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	return writeBytesToFile(file, f.Bytes)
 }
 
 func (s *ServiceImpl) Remove(name string) error {

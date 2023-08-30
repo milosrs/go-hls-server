@@ -1,5 +1,7 @@
 import { FileUploadWithPreview } from 'file-upload-with-preview'
 
+const fileCookie = 'file-name'
+const uploadedCookie = 'uploaded-length'
 let upload: FileUploadWithPreview | null = null
 
 export const randomString = (length: number) => (Math.random() + 1).toString(36).substring(length);
@@ -9,7 +11,8 @@ export const createFileUpload = (hash: string) => {
     return hash
 }
 
-export const createFileChunks = async (): Promise<Int8Array[]> => {
+export const createFileChunks = async (alreadyUploaded: string): Promise<Int8Array[]> => {
+    const uploadedLength = parseInt(alreadyUploaded)
     const ret: Int8Array[] = []
     const streamReader = upload.cachedFileArray[0].stream().getReader()
 

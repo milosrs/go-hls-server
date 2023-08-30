@@ -3,13 +3,13 @@
 <html>
     <meta charset="UTF-8"/>
     <script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
-    <link rel="stylesheet" href="main.css">
+    <link rel="stylesheet" href="frontend/dist/index.css">
     
     <head>
         <title>Chunky</title>
-    <script defer src="index.js"></script><link href="main.css" rel="stylesheet"></head>
+    <script defer src="index.js"></script></head>
     
-    <script src="index.js"></script>
+    <script src="frontend/dist/index.js"></script>
 
     <body class="bg-black">
         <main>
@@ -19,23 +19,36 @@
         </main>
 
         <div class="flex flex-col">
-            <div class="flex">
-                <div class="file-import-container dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl align-baseline justify-center">
-                    <div 
-                        class="custom-file-container" 
-                        _="init
-                             call lib.randomString(7) 
+            <div class="file-import-container dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl align-baseline justify-center">
+                <div 
+                    class="custom-file-container" 
+                    _="
+                        init
+                            call lib.randomString(7) 
                             then set @data-upload-id to it
                             then call lib.createFileUpload(result)
-                        end"
-                    />
-                </div>
+                        end
+                    "
+                ></div>
             </div>
 
-            <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-                Upload
-            </button>
-        </div>
+            <span class="flex content-center align-baseline">
+                <button 
+                    id="upload" 
+                    class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full" 
+                    _="
+                        on click call lib.createFileChunks() then set array to it then log array end
+                        then repeat for c in array
+                            fetch /uploadChunk as json method:POST with c in body
+                    "
+                >
+                    Upload
+                </button>
+            </span>
 
+            <div class="w-full bg-gray-200 rounded-full dark:bg-gray-700">
+                <div class="bg-blue-600 text-xs font-medium text-blue-100 text-center p-0.5 leading-none rounded-full" style="width: 45%"> 45%</div>
+            </div>
+        </div>
     </body>
 </html>

@@ -4,15 +4,15 @@
 @tailwind utilities;
 
 html {
-    color: white;
+    color: black;
     width: 100%;
     height: 100%;
+}
 
-    body {
-        width: 100%;
-        height: 100%;
-        margin: auto;
-    }
+body {
+    width: 100%;
+    height: 100%;
+    margin: auto;
 }
 
 .file-import-container {

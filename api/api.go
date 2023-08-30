@@ -8,6 +8,7 @@ import (
 const (
 	apiGroup    = "/api"
 	usersGroup  = "/users"
+	startUpload = "/startUpload"
 	uploadChunk = "/uploadChunk"
 )
 
@@ -19,6 +20,7 @@ func CreateRouter() *gin.Engine {
 
 	fileService := files.ServiceImpl{}
 
+	users.POST(startUpload, files.ReceiveFirstChunk(&fileService))
 	users.PATCH(uploadChunk, files.PatchChunk(&fileService))
 	users.DELETE(uploadChunk, files.RemoveChunk(&fileService))
 
