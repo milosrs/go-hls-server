@@ -11,9 +11,9 @@ export const createFileUpload = (hash: string) => {
     return hash
 }
 
-export const createFileChunks = async (alreadyUploaded: string): Promise<Int8Array[]> => {
+export const createFileChunks = async (alreadyUploaded: string): Promise<Uint8Array[]> => {
     const uploadedLength = parseInt(alreadyUploaded)
-    const ret: Int8Array[] = []
+    const ret: Uint8Array[] = []
     const streamReader = upload.cachedFileArray[0].stream().getReader()
 
     while(true) {
@@ -22,9 +22,65 @@ export const createFileChunks = async (alreadyUploaded: string): Promise<Int8Arr
             break
         }
 
-        ret.push(new Int8Array(value))
+        ret.push(new Uint8Array(value))
     }
 
-    console.log("RETURN: ", ret)
     return ret
+}
+
+const prefix = '/api/users/'
+
+export const sendFileChunks = async (chunks: Uint8Array[]) => {
+    const progress = document.getElementById('progress')
+    const fileName: HTMLInputElement = document.getElementById('fileName') as HTMLInputElement
+
+    for(let i = 0; i < chunks.length; i++) {
+        const body = JSON.stringify({
+            Name: fileName.value,
+            Bytes: Array.from(chunks[i]),
+        })
+
+        const resp = await (i === 0 ? sendStartUpload(chunks, fileName.value) : sendUploadChunk(chunks[i], fileName.value))
+
+        if(resp.status === 200) {
+            const currentProgress = (chunks.length / i) * 100
+            progress.style.width = `${currentProgress.toFixed(0)}%`
+            progress.innerText = `${currentProgress.toFixed(0)}%`
+        } else {
+            alert(`error.... ${resp.statusText}`)
+        }
+    }
+}
+
+const sendStartUpload = (chunk: Uint8Array[], name: string): Promise<any> => {
+    const url = prefix + 'startUpload'
+    const body = JSON.stringify({
+        Name: name,
+        NumberOfChunks: chunk.length,
+        Bytes: Array.from(chunk[0])
+    })
+
+    return fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'POST',
+        body,
+    })
+}
+
+const sendUploadChunk = (chunk: Uint8Array, name: string): Promise<any> => {
+    const url = prefix + 'uploadChunk'
+    const body = JSON.stringify({
+        Name: name,
+        Bytes: Array.from(chunk)
+    })
+
+    return fetch(url, {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        method: 'PATCH',
+        body,
+    })
 }

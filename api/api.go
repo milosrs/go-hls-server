@@ -22,7 +22,6 @@ func CreateRouter() *gin.Engine {
 
 	users.POST(startUpload, files.ReceiveFirstChunk(&fileService))
 	users.PATCH(uploadChunk, files.PatchChunk(&fileService))
-	users.DELETE(uploadChunk, files.RemoveChunk(&fileService))
 
 	return router
 }
