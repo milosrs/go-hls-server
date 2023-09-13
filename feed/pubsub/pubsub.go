@@ -7,18 +7,12 @@ import (
 	"github.com/milosrs/go-hls-server/feed"
 )
 
-type IPubSub interface {
-	Subscribe(id uuid.UUID, topic string) *feed.SubChan
-	Unsubscribe(sc feed.SubChan, topic string)
-	Publish(msg feed.Message)
-}
-
 type PubSub struct {
 	mux    sync.Mutex
 	topics map[string][]*feed.SubChan
 }
 
-func NewPubSub() IPubSub {
+func NewPubSub() feed.IPubSub {
 	return &PubSub{
 		mux:    sync.Mutex{},
 		topics: make(map[string][]*feed.SubChan, 0),

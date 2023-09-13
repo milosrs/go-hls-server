@@ -4,19 +4,16 @@ import (
 	"bytes"
 	"crypto/sha1"
 	"encoding/base64"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
 	"sync"
 
 	"github.com/google/uuid"
+	"github.com/milosrs/go-hls-server/feed"
 	"golang.org/x/net/websocket"
 )
-
-type IServer interface {
-	HandleUpgrade(req *http.Request) http.Response
-	HandleConnection(ws *websocket.Conn)
-}
 
 type WSClient struct {
 	id     uuid.UUID
@@ -29,7 +26,7 @@ type Server struct {
 	clients []WSClient
 }
 
-func NewServer() *Server {
+func NewServer() feed.IWSServer {
 	return &Server{
 		mux:     sync.Mutex{},
 		clients: make([]WSClient, 0),
@@ -108,14 +105,22 @@ func (s *Server) readLoop(ws WSClient, i int) {
 			break
 		}
 
+		msg := feed.Message{}
+		if n > 0 {
+			err := json.Unmarshal(buf, &msg)
+			if err != nil {
+				fmt.Println("error unmarshaling json: ", err)
+			}
+		}
+
+		if msg.Topic == "CLOSE" {
+			break
+		}
+
 		if err != nil {
 			fmt.Println("Read error: ", err)
 			continue
 		}
-
-		msg := buf[:n]
-		fmt.Printf("Message: %s\n", msg)
-		ws.wsConn.Write([]byte("Thank you for the message!"))
 	}
 }
 
@@ -126,12 +131,5 @@ func (s *Server) broadcast(b []byte) {
 				fmt.Printf("Write error: Receiver: %s \t Message: %e", con.RemoteAddr(), err)
 			}
 		}(ws.wsConn)
-	}
-}
-
-func (s *Server) handleWSFeed(ws *websocket.Conn) {
-	for {
-		payload := fmt.Sprintf("data -> ")
-		ws.Write([]byte(payload))
 	}
 }
