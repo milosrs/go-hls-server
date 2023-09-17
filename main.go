@@ -2,18 +2,17 @@ package main
 
 import (
 	"html/template"
-	"net/http"
 
 	"github.com/gin-gonic/gin"
 	"github.com/milosrs/go-hls-server/api"
 	"github.com/milosrs/go-hls-server/feed/websocket"
-	ws "golang.org/x/net/websocket"
 )
 
 const commonEntry = "frontend/dist"
 
 func main() {
-	wsServer := websocket.NewServer()
+	wsHub := websocket.NewHub()
+	go wsHub.Start()
 
 	router := api.CreateRouter()
 	router.Static("/frontend/dist", "./frontend/dist")
@@ -23,14 +22,20 @@ func main() {
 		tmp := template.Must(template.ParseFiles(commonEntry + "/index.html"))
 		tmp.Execute(ctx.Writer, nil)
 	})
-	router.GET("/ws", func(ctx *gin.Context) {
-		result := wsServer.HandleUpgrade(*ctx.Request)
-		ctx.Request.Response = result
+
+	wsRouter := router.Group("/ws")
+	wsRouter.GET("", func(ctx *gin.Context) {
+		websocket.ServeWS(
+			wsHub,
+			ctx.Param("topic"),
+			ctx.Writer,
+			ctx.Request,
+		)
 		ctx.Status(200)
 	})
 
-	mux := http.NewServeMux()
-	mux.Handle("/", ws.Handler(wsServer.HandleConnection))
+	router.Run("localhost:8000")
 
-	router.Run()
+	// Stoping agents
+	wsHub.Stop()
 }

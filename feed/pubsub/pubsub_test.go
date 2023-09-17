@@ -7,7 +7,7 @@ import (
 
 	"github.com/go-playground/assert/v2"
 	"github.com/google/uuid"
-	"github.com/milosrs/go-hls-server/feed"
+	"github.com/milosrs/go-hls-server/feed/common"
 	"github.com/milosrs/go-hls-server/feed/pubsub"
 )
 
@@ -15,7 +15,7 @@ func TestWholeProcess(t *testing.T) {
 	ps := pubsub.NewPubSub()
 	uuid := uuid.New()
 	topic := "test"
-	message := feed.Message{
+	message := common.Message{
 		Topic:   topic,
 		Content: []byte("Hello world of testing"),
 		ID:      uuid,
@@ -44,12 +44,12 @@ func TestAsyncProcess(t *testing.T) {
 	ps := pubsub.NewPubSub()
 	uuid := uuid.New()
 	topic := "test"
-	message := feed.Message{
+	message := common.Message{
 		Topic:   topic,
 		Content: []byte("Hello world of testing"),
 		ID:      uuid,
 	}
-	subChans := make([]*feed.SubChan, 0)
+	subChans := make([]*common.SubChan, 0)
 
 	creationWG := sync.WaitGroup{}
 	creationWG.Add(agents)

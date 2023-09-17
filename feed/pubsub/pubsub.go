@@ -4,33 +4,33 @@ import (
 	"sync"
 
 	"github.com/google/uuid"
-	"github.com/milosrs/go-hls-server/feed"
+	"github.com/milosrs/go-hls-server/feed/common"
 )
 
 type PubSub struct {
 	mux    sync.Mutex
-	topics map[string][]*feed.SubChan
+	topics map[string][]*common.SubChan
 }
 
-func NewPubSub() feed.IPubSub {
+func NewPubSub() common.IPubSub {
 	return &PubSub{
 		mux:    sync.Mutex{},
-		topics: make(map[string][]*feed.SubChan, 0),
+		topics: make(map[string][]*common.SubChan, 0),
 	}
 }
 
-func (s *PubSub) Subscribe(id uuid.UUID, topic string) *feed.SubChan {
+func (s *PubSub) Subscribe(id uuid.UUID, topic string) *common.SubChan {
 	s.mux.Lock()
 	c, ok := s.topics[topic]
 
 	if !ok {
-		c = make([]*feed.SubChan, 0)
+		c = make([]*common.SubChan, 0)
 		s.topics[topic] = c
 	}
 	s.mux.Unlock()
 
-	ch := make(chan feed.Message)
-	sc := &feed.SubChan{
+	ch := make(chan common.Message)
+	sc := &common.SubChan{
 		ID:    id,
 		Chann: ch,
 	}
@@ -42,7 +42,7 @@ func (s *PubSub) Subscribe(id uuid.UUID, topic string) *feed.SubChan {
 	return sc
 }
 
-func (s *PubSub) Unsubscribe(sc feed.SubChan, topic string) {
+func (s *PubSub) Unsubscribe(sc common.SubChan, topic string) {
 	c, ok := s.topics[topic]
 	if !ok {
 		return
@@ -57,7 +57,7 @@ func (s *PubSub) Unsubscribe(sc feed.SubChan, topic string) {
 	}
 }
 
-func (s *PubSub) Publish(msg feed.Message) {
+func (s *PubSub) Publish(msg common.Message) {
 	c, ok := s.topics[msg.Topic]
 	if !ok {
 		return
