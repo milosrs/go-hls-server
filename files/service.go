@@ -14,9 +14,32 @@ type Service interface {
 	CreateFile(f *model.InitialFileData) (int64, error)
 	AppendChunk(f *model.FileChunk) (int64, error)
 	Remove(name string) error
+	Start()
+	Stop()
+}
+
+type createFileReq struct {
+	data *model.InitialFileData
+	resp chan error
+}
+
+type appendFileReq struct {
+	data *model.FileChunk
+	resp chan error
 }
 
 type ServiceImpl struct {
+	createFile chan createFileReq
+	appendFile chan appendFileReq
+	stop       chan struct{}
+}
+
+func NewService() Service {
+	return &ServiceImpl{
+		createFile: make(chan createFileReq),
+		appendFile: make(chan appendFileReq),
+		stop:       make(chan struct{}),
+	}
 }
 
 func tryCreateVideoFolder() error {
@@ -51,6 +74,28 @@ func writeBytesToFile(f *os.File, bytes []byte) (int64, error) {
 	return info.Size(), nil
 }
 
+func (s *ServiceImpl) Start() {
+	for {
+		select {
+		case req := <-s.createFile:
+			_, err := s.CreateFile(req.data)
+			req.resp <- err
+		case req := <-s.appendFile:
+			_, err := s.AppendChunk(req.data)
+			req.resp <- err
+		case <-s.stop:
+			s.Stop()
+			return
+		}
+	}
+}
+
+func (s *ServiceImpl) Stop() {
+	close(s.appendFile)
+	close(s.createFile)
+	close(s.stop)
+}
+
 func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
 	if err := tryCreateVideoFolder(); err != nil {
 		return 0, err
@@ -76,7 +121,7 @@ func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
 	return writeBytesToFile(file, f.Bytes)
 }
 
-func (s *ServiceImpl) AppendChunk(f *model.FileChunk) (int64, error) {
+func (*ServiceImpl) AppendChunk(f *model.FileChunk) (int64, error) {
 	videoFile := filepath.Join(videoFolder, f.Name)
 	file, err := os.OpenFile(videoFile, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {

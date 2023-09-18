@@ -16,7 +16,7 @@ type IHub interface {
 
 type clientRegMsg struct {
 	topic  string
-	client *Client
+	client *ClientImpl
 }
 
 type broadcastMsg struct {
@@ -26,7 +26,7 @@ type broadcastMsg struct {
 
 type Hub struct {
 	mux        sync.Mutex
-	clients    map[string]map[*Client]bool
+	clients    map[string]map[*ClientImpl]bool
 	broadcast  chan common.Message
 	register   chan clientRegMsg
 	unregister chan clientRegMsg
@@ -36,7 +36,7 @@ type Hub struct {
 func NewHub() IHub {
 	return &Hub{
 		mux:        sync.Mutex{},
-		clients:    make(map[string]map[*Client]bool),
+		clients:    make(map[string]map[*ClientImpl]bool),
 		broadcast:  make(chan common.Message, 0),
 		register:   make(chan clientRegMsg, 0),
 		unregister: make(chan clientRegMsg, 0),
@@ -44,24 +44,12 @@ func NewHub() IHub {
 	}
 }
 
-func (h *Hub) Register(crm clientRegMsg) {
-	h.register <- crm
-}
-
-func (h *Hub) Unregister(crm clientRegMsg) {
-	h.unregister <- crm
-}
-
-func (h *Hub) Broadcast(data common.Message) {
-	h.broadcast <- data
-}
-
 func (h *Hub) registerClient(c *clientRegMsg) {
 	defer h.mux.Unlock()
 	h.mux.Lock()
 
 	if m, exists := h.clients[c.topic]; !exists {
-		h.clients[c.topic] = map[*Client]bool{
+		h.clients[c.topic] = map[*ClientImpl]bool{
 			c.client: true,
 		}
 	} else {
@@ -107,4 +95,16 @@ func (h *Hub) Start() {
 
 func (h *Hub) Stop() {
 	h.stop <- struct{}{}
+}
+
+func (h *Hub) Register(crm clientRegMsg) {
+	h.register <- crm
+}
+
+func (h *Hub) Unregister(crm clientRegMsg) {
+	h.unregister <- crm
+}
+
+func (h *Hub) Broadcast(data common.Message) {
+	h.broadcast <- data
 }

@@ -4,10 +4,12 @@ import (
 	"github.com/google/uuid"
 )
 
+type OnMsgRecieved func(msg Message) error
+
 type Message struct {
-	Topic   string    `json:"topic"`
-	Content []byte    `json:"content"`
-	ID      uuid.UUID `json:"id"`
+	Topic   string     `json:"topic"`
+	Content []byte     `json:"content"`
+	ID      *uuid.UUID `json:"-"`
 }
 
 type SubChan struct {

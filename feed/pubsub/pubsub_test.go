@@ -18,7 +18,7 @@ func TestWholeProcess(t *testing.T) {
 	message := common.Message{
 		Topic:   topic,
 		Content: []byte("Hello world of testing"),
-		ID:      uuid,
+		ID:      &uuid,
 	}
 
 	newSubChan := ps.Subscribe(uuid, topic)
@@ -47,7 +47,7 @@ func TestAsyncProcess(t *testing.T) {
 	message := common.Message{
 		Topic:   topic,
 		Content: []byte("Hello world of testing"),
-		ID:      uuid,
+		ID:      &uuid,
 	}
 	subChans := make([]*common.SubChan, 0)
 
