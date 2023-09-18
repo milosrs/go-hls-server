@@ -3,6 +3,7 @@ package files
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 
 	gorilla_ws "github.com/gorilla/websocket"
@@ -39,7 +40,12 @@ func (f *FileFeed) onMsgRecieved(msg common.Message) error {
 			return errUnknownMessage
 		}
 
-		_, err := f.service.AppendChunk(&chunk)
+		percent, err := f.service.AppendChunk(&chunk)
+		f.client.Send(common.Message{
+			Topic:   msg.Topic,
+			ID:      msg.ID,
+			Content: []byte(fmt.Sprintf("%f", percent)),
+		})
 		return err
 	}
 

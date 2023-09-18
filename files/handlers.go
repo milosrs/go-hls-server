@@ -11,7 +11,7 @@ import (
 // 30mb max request
 const maxRequest = 30000000
 
-func setCookiesToResponse(name string, length int64, writer http.ResponseWriter) {
+func setCookiesToResponse(name string, length float64, writer http.ResponseWriter) {
 	fileNameCookie := &http.Cookie{
 		Name:     "file-name",
 		Value:    name,

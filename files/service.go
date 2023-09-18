@@ -11,8 +11,8 @@ import (
 const videoFolder = "videos"
 
 type Service interface {
-	CreateFile(f *model.InitialFileData) (int64, error)
-	AppendChunk(f *model.FileChunk) (int64, error)
+	CreateFile(f *model.InitialFileData) (float64, error)
+	AppendChunk(f *model.FileChunk) (float64, error)
 	Remove(name string) error
 	Start()
 	Stop()
@@ -60,18 +60,18 @@ func doesFileExist(name string) bool {
 	return true
 }
 
-func writeBytesToFile(f *os.File, bytes []byte) (int64, error) {
+func writeBytesToFile(f *os.File, bytes []byte) error {
 	_, err := f.Write(bytes)
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	info, err := f.Stat()
+	_, err = f.Stat()
 	if err != nil {
-		return 0, err
+		return err
 	}
 
-	return info.Size(), nil
+	return nil
 }
 
 func (s *ServiceImpl) Start() {
@@ -96,7 +96,7 @@ func (s *ServiceImpl) Stop() {
 	close(s.stop)
 }
 
-func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
+func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (float64, error) {
 	if err := tryCreateVideoFolder(); err != nil {
 		return 0, err
 	}
@@ -108,7 +108,7 @@ func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
 			return 0, err
 		}
 
-		return info.Size(), err
+		return float64(info.Size()), err
 	}
 
 	videoFile := filepath.Join(videoFolder, f.Name)
@@ -118,10 +118,15 @@ func (s *ServiceImpl) CreateFile(f *model.InitialFileData) (int64, error) {
 	}
 	defer file.Close()
 
-	return writeBytesToFile(file, f.Bytes)
+	err = writeBytesToFile(file, f.Bytes)
+	if err != nil {
+		return 0, err
+	}
+
+	return float64(int64(f.ChunkNumber) / f.NumberOfChunks), nil
 }
 
-func (*ServiceImpl) AppendChunk(f *model.FileChunk) (int64, error) {
+func (*ServiceImpl) AppendChunk(f *model.FileChunk) (float64, error) {
 	videoFile := filepath.Join(videoFolder, f.Name)
 	file, err := os.OpenFile(videoFile, os.O_APPEND|os.O_WRONLY, 0644)
 	if err != nil {
@@ -129,7 +134,12 @@ func (*ServiceImpl) AppendChunk(f *model.FileChunk) (int64, error) {
 	}
 	defer file.Close()
 
-	return writeBytesToFile(file, f.Bytes)
+	err = writeBytesToFile(file, f.Bytes)
+	if err != nil {
+		return 0, err
+	}
+
+	return float64(int64(f.ChunkNumber) / f.NumberOfChunks), nil
 }
 
 func (s *ServiceImpl) Remove(name string) error {
