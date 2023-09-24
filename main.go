@@ -2,6 +2,7 @@ package main
 
 import (
 	"html/template"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/milosrs/go-hls-server/api"
@@ -20,7 +21,6 @@ func main() {
 
 	router := api.CreateRouter()
 	router.Static("/frontend/dist", "./frontend/dist")
-	router.Static("/frontend/src", "./frontend/src")
 
 	router.GET("/", func(ctx *gin.Context) {
 		tmp := template.Must(template.ParseFiles(commonEntry + "/index.html"))
@@ -30,8 +30,13 @@ func main() {
 	wsRouter := router.Group("/ws")
 	wsRouter.GET("/:topic", func(ctx *gin.Context) {
 		conn := websocket.ServeWS(ctx.Writer, ctx.Request)
-		files.NewFeed(conn, hub, fileService)
-		ctx.Status(200)
+
+		if strings.Compare(ctx.Param("topic"), "file") == 0 {
+			files.NewFeed(conn, hub, fileService)
+			ctx.Status(200)
+		} else {
+			ctx.Status(404)
+		}
 	})
 
 	router.Run("localhost:8000")

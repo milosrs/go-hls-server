@@ -1,0 +1,30 @@
+<div class="file-import-container dark:bg-slate-800 rounded-lg px-6 py-8 ring-1 ring-slate-900/5 shadow-xl align-baseline justify-center">
+    <div 
+        class="custom-file-container" 
+        _="
+            init
+                call lib.randomString(7) 
+                then set @data-upload-id to it
+                then call lib.createFileUpload(result)
+            end
+        "
+    ></div>
+</div>
+
+<input type="text" id="fileName" placeholder="Prefered filename on server..."/>
+
+<span class="flex content-center align-baseline">
+    <button 
+        id="upload" 
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full"
+        
+        _="
+            on click call lib.createFileChunks() 
+                then 
+                    call lib.sendFileChunks(it) 
+            end
+        "
+    >
+        Upload
+    </button>
+</span>

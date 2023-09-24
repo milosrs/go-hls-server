@@ -27,3 +27,9 @@ input {
     min-height: 100px;
     margin: 12px;
 }
+
+#alerts {
+    position: fixed;
+    right: 0px; bottom: 0px;
+    padding: 6px;
+}
